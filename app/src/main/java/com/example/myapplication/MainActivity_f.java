@@ -11,6 +11,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -99,11 +102,22 @@ public class MainActivity_f extends AppCompatActivity {
             }
             return null;
         }
+        @SuppressLint("SetTextI18n")
         @SuppressWarnings("deprecation")
         @Override
         protected void onPostExecute(String result){
             super.onPostExecute(result);
-            result_inf.setText(result);
+            try {
+                JSONObject JsonObj = new JSONObject(result);
+
+                result_inf.setText("Temp: " + JsonObj.getJSONObject("main").getDouble("temp") + "\n" + "Feels Like: " + JsonObj.getJSONObject("main").getDouble("feels_like") + "\n" +
+                        "Temp MIN: " + JsonObj.getJSONObject("main").getDouble("temp_min") + "\n" + "Temp MAX: " + JsonObj.getJSONObject("main").getDouble("temp_max"));
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
         }
     }
 }
